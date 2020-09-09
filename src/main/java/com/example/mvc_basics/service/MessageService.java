@@ -1,20 +1,23 @@
 package com.example.mvc_basics.service;
 
+import com.example.mvc_basics.mapper.MessageMapper;
 import com.example.mvc_basics.model.ChatForm;
 import com.example.mvc_basics.model.ChatMessage;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class MessageService {
 
-    private List<ChatMessage> chatMessages;
+    private MessageMapper messageMapper;
+
+    public MessageService(MessageMapper messageMapper) {
+        this.messageMapper = messageMapper;
+    }
 
     public List<ChatMessage> getChatMessages() {
-        return this.chatMessages;
+        return messageMapper.getMessages();
     }
 
     public void addMessage(ChatForm chatForm) {
@@ -31,12 +34,7 @@ public class MessageService {
                 newMessage.setMessage(chatForm.getMessageText().toLowerCase());
                 break;
         }
-        this.chatMessages.add(newMessage);
-    }
-
-    @PostConstruct
-    public void postConstruct() {
-        this.chatMessages = new ArrayList<>();
+        this.messageMapper.insert(newMessage);
     }
 
 }

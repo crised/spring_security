@@ -1,20 +1,21 @@
 package com.example.mvc_basics.mapper;
 
 import com.example.mvc_basics.model.ChatMessage;
-import com.example.mvc_basics.model.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 @Mapper
 public interface MessageMapper {
 
     @Select("SELECT * FROM MESSAGES")
-    ChatMessage[] getMessages();
+    @Results(
+            {@Result(property = "message", column = "messagetext")
+    })
+    List<ChatMessage> getMessages();
 
-    @Insert("INSERT INTO MESSAGES (username, message)" +
+    @Insert("INSERT INTO MESSAGES (username, messagetext)" +
             "VALUES(#{username}, #{message})")
     @Options(useGeneratedKeys = true, keyProperty = "messageId")
-    int insert(User user);
+    int insert(ChatMessage message);
 }
